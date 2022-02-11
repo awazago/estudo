@@ -1,5 +1,6 @@
 package com.zago.estudo;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.zago.estudo.domain.Cidade;
 import com.zago.estudo.domain.Cliente;
 import com.zago.estudo.domain.Endereco;
 import com.zago.estudo.domain.Estado;
+import com.zago.estudo.domain.Pagamento;
+import com.zago.estudo.domain.PagamentoComBoleto;
+import com.zago.estudo.domain.PagamentoComCartao;
+import com.zago.estudo.domain.Pedido;
 import com.zago.estudo.domain.Produto;
+import com.zago.estudo.domain.enums.EstadoPagamento;
 import com.zago.estudo.domain.enums.TipoCliente;
 import com.zago.estudo.repositories.CategoriaRepository;
 import com.zago.estudo.repositories.CidadeRepository;
 import com.zago.estudo.repositories.ClienteRepository;
 import com.zago.estudo.repositories.EnderecoRepository;
 import com.zago.estudo.repositories.EstadoRepository;
+import com.zago.estudo.repositories.PagamentoRepository;
+import com.zago.estudo.repositories.PedidoRepository;
 import com.zago.estudo.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class EstudoApplication implements CommandLineRunner{
 	ClienteRepository cliRepo;
 	@Autowired
 	EnderecoRepository endRepo;
+	@Autowired
+	PedidoRepository pedRepo;
+	@Autowired
+	PagamentoRepository pagtoRepo;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EstudoApplication.class, args);
@@ -84,6 +96,23 @@ public class EstudoApplication implements CommandLineRunner{
 		
 		cliRepo.save(cli1);
 		endRepo.saveAll(Arrays.asList(e1, e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), e1, cli1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), e2, cli1);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, 
+				ped2, sdf.parse("20/10/2017  00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedRepo.saveAll(Arrays.asList(ped1, ped2));
+		
+		pagtoRepo.saveAll(Arrays.asList(pagto1, pagto2));
 		
 	}
 

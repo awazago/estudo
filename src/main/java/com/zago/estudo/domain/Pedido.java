@@ -3,26 +3,42 @@ package com.zago.estudo.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Pedido implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Date instante;
+	@ManyToOne
+	@JoinColumn(name = "endereco_entrega_id")
 	private Endereco enderecoEntrega;
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
 	
 	public Pedido() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Pedido(Integer id, Date instante, Endereco enderecoEntrega, Cliente cliente, Pagamento pagamento) {
+	public Pedido(Integer id, Date instante, Endereco enderecoEntrega, Cliente cliente) {
 		super();
 		this.id = id;
 		this.instante = instante;
 		this.enderecoEntrega = enderecoEntrega;
 		this.cliente = cliente;
-		this.pagamento = pagamento;
 	}
 
 	public Integer getId() {
