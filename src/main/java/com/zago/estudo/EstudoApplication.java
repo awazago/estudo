@@ -13,6 +13,7 @@ import com.zago.estudo.domain.Cidade;
 import com.zago.estudo.domain.Cliente;
 import com.zago.estudo.domain.Endereco;
 import com.zago.estudo.domain.Estado;
+import com.zago.estudo.domain.ItemPedido;
 import com.zago.estudo.domain.Pagamento;
 import com.zago.estudo.domain.PagamentoComBoleto;
 import com.zago.estudo.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.zago.estudo.repositories.CidadeRepository;
 import com.zago.estudo.repositories.ClienteRepository;
 import com.zago.estudo.repositories.EnderecoRepository;
 import com.zago.estudo.repositories.EstadoRepository;
+import com.zago.estudo.repositories.ItemPedidoRepository;
 import com.zago.estudo.repositories.PagamentoRepository;
 import com.zago.estudo.repositories.PedidoRepository;
 import com.zago.estudo.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class EstudoApplication implements CommandLineRunner{
 	PedidoRepository pedRepo;
 	@Autowired
 	PagamentoRepository pagtoRepo;
+	@Autowired
+	ItemPedidoRepository itemPedidoRepo;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EstudoApplication.class, args);
@@ -114,6 +118,18 @@ public class EstudoApplication implements CommandLineRunner{
 		
 		pagtoRepo.saveAll(Arrays.asList(pagto1, pagto2));
 		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepo.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 
 }
