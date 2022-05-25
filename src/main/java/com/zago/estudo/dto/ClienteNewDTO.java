@@ -24,7 +24,7 @@ public class ClienteNewDTO implements Serializable{
 	private Integer cidadeId;
 	
 	public ClienteNewDTO() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public String getNome() {
@@ -130,6 +130,4 @@ public class ClienteNewDTO implements Serializable{
 	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;
 	}
-	
-	
 }
